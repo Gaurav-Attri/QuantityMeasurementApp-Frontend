@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quantity Measurment App</title>
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <main class="page">
+      <div class="card">
+
+        <!-- Toggle -->
+        <div class="toggle-bar">
+          <button class="toggle-btn active" id="btn-login" onclick="switchTab('login')">Log In</button>
+          <button class="toggle-btn" id="btn-signup" onclick="switchTab('signup')">Sign Up</button>
+        </div>
+
+        <!-- Login Form -->
+        <form class="auth-form" id="form-login" novalidate>
+          <div class="form-header">
+            <h1 class="form-title">Welcome back</h1>
+            <p class="form-subtitle">Enter your credentials to continue</p>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="login-email">Email</label>
+            <input
+              class="field-input"
+              type="email"
+              id="login-email"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            <span class="field-error" id="login-email-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="login-password">Password</label>
+            <div class="input-wrapper">
+              <input
+                class="field-input"
+                type="password"
+                id="login-password"
+                name="password"
+                placeholder="••••••••"
+                autocomplete="current-password"
+              />
+              <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="togglePassword('login-password', this)">
+                <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+            <span class="field-error" id="login-password-error"></span>
+          </div>
+
+          <div class="alert hidden" id="login-alert"></div>
+
+          <button type="submit" class="submit-btn" id="login-submit">
+            <span class="btn-text">Log In</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+
+          <p class="switch-text">
+            Don't have an account?
+            <a href="#" class="switch-link" onclick="switchTab('signup'); return false;">Sign up</a>
+          </p>
+        </form>
+
+        <!-- Signup Form -->
+        <form class="auth-form hidden" id="form-signup" novalidate>
+          <div class="form-header">
+            <h1 class="form-title">Create account</h1>
+            <p class="form-subtitle">Fill in your details to get started</p>
+          </div>
+
+          <div class="name-row">
+            <div class="field-group">
+              <label class="field-label" for="signup-firstname">First Name</label>
+              <input
+                class="field-input"
+                type="text"
+                id="signup-firstname"
+                name="firstName"
+                placeholder="John"
+                autocomplete="given-name"
+              />
+              <span class="field-error" id="signup-firstname-error"></span>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label" for="signup-lastname">Last Name</label>
+              <input
+                class="field-input"
+                type="text"
+                id="signup-lastname"
+                name="lastName"
+                placeholder="Doe"
+                autocomplete="family-name"
+              />
+              <span class="field-error" id="signup-lastname-error"></span>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="signup-email">Email</label>
+            <input
+              class="field-input"
+              type="email"
+              id="signup-email"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+            <span class="field-error" id="signup-email-error"></span>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="signup-password">Password</label>
+            <div class="input-wrapper">
+              <input
+                class="field-input"
+                type="password"
+                id="signup-password"
+                name="password"
+                placeholder="••••••••"
+                autocomplete="new-password"
+              />
+              <button type="button" class="toggle-password" aria-label="Toggle password visibility" onclick="togglePassword('signup-password', this)">
+                <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+            <span class="field-error" id="signup-password-error"></span>
+          </div>
+
+          <div class="alert hidden" id="signup-alert"></div>
+
+          <button type="submit" class="submit-btn" id="signup-submit">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-spinner hidden"></span>
+          </button>
+
+          <p class="switch-text">
+            Already have an account?
+            <a href="#" class="switch-link" onclick="switchTab('login'); return false;">Log in</a>
+          </p>
+        </form>
+
+      </div>
+    </main>
+    <script src="../../shared/js/api.js"></script>
+    <script src="auth.js"></script>
+  </body>
+</html>

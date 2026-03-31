@@ -1,0 +1,15 @@
+/* ── Variables ─────────────────────────────────────────── */
+:root {
+  --color-bg:         #F9FAFB;
+  --color-surface:    #FFFFFF;
+  --color-primary:    #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-text:       #111827;
+  --color-muted:      #6B7280;
+  --color-border:     #E5E7EB;
+  --color-success:    #16A34A;
+  --color-error:      #DC2626;
+
+  --radius:           8px;
+  --transition:       0.18s ease;
+}
