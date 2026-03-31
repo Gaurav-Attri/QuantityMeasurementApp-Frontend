@@ -1,0 +1,413 @@
+<!-- ── Topbar ─────────────────────────────────────────── -->
+<header class="topbar">
+  <span class="topbar-brand">QMeasure</span>
+  <button class="logout-btn" (click)="logout()">
+    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+      <polyline points="16 17 21 12 16 7"/>
+      <line x1="21" y1="12" x2="9" y2="12"/>
+    </svg>
+    Logout
+  </button>
+</header>
+
+<!-- ── Tab bar ───────────────────────────────────────── -->
+<nav class="tabbar">
+  <button class="tab-btn" [class.active]="activeTab === 'add'"      (click)="switchTab('add')">Add</button>
+  <button class="tab-btn" [class.active]="activeTab === 'subtract'" (click)="switchTab('subtract')">Subtract</button>
+  <button class="tab-btn" [class.active]="activeTab === 'divide'"   (click)="switchTab('divide')">Divide</button>
+  <button class="tab-btn" [class.active]="activeTab === 'compare'"  (click)="switchTab('compare')">Compare</button>
+  <button class="tab-btn" [class.active]="activeTab === 'convert'"  (click)="switchTab('convert')">Convert</button>
+  <button class="tab-btn" [class.active]="activeTab === 'history'"  (click)="switchTab('history')">History</button>
+</nav>
+
+<!-- ── Main content ──────────────────────────────────── -->
+<main class="content">
+
+  <!-- ══ ADD ══════════════════════════════════════════ -->
+  <section *ngIf="activeTab === 'add'">
+    <div class="panel-inner">
+      <div class="op-card">
+        <div class="op-card-header">
+          <h2 class="op-title">Add</h2>
+          <p class="op-subtitle">Add two quantities together</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Quantity Type</label>
+          <select class="field-select" [(ngModel)]="addQtyType" (change)="onAddQtyTypeChange()">
+            <option value="">Select type</option>
+            <option *ngFor="let qt of quantityTypes" [value]="qt">{{ qt }}</option>
+          </select>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 1</label>
+            <input class="field-input" type="number" [(ngModel)]="addVal1" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 1</label>
+            <select class="field-select" [(ngModel)]="addUnit1" [disabled]="!addQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of addUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 2</label>
+            <input class="field-input" type="number" [(ngModel)]="addVal2" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 2</label>
+            <select class="field-select" [(ngModel)]="addUnit2" [disabled]="!addQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of addUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="alert" *ngIf="addAlert"
+             [class.alert-error]="addAlert.type === 'error'"
+             [class.alert-success]="addAlert.type === 'success'">
+          {{ addAlert.message }}
+        </div>
+
+        <button class="submit-btn" (click)="onAdd()" [disabled]="addLoading">
+          <span *ngIf="!addLoading">Calculate</span>
+          <span *ngIf="addLoading" class="spinner"></span>
+        </button>
+
+        <div class="result-box" *ngIf="addResult">
+          <div class="result-label">Result</div>
+          <div class="result-value">
+            {{ addResult.value }}<span class="result-unit">{{ addResult.unitSymbol }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ SUBTRACT ═════════════════════════════════════ -->
+  <section *ngIf="activeTab === 'subtract'">
+    <div class="panel-inner">
+      <div class="op-card">
+        <div class="op-card-header">
+          <h2 class="op-title">Subtract</h2>
+          <p class="op-subtitle">Subtract one quantity from another</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Quantity Type</label>
+          <select class="field-select" [(ngModel)]="subQtyType" (change)="onSubQtyTypeChange()">
+            <option value="">Select type</option>
+            <option *ngFor="let qt of quantityTypes" [value]="qt">{{ qt }}</option>
+          </select>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 1</label>
+            <input class="field-input" type="number" [(ngModel)]="subVal1" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 1</label>
+            <select class="field-select" [(ngModel)]="subUnit1" [disabled]="!subQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of subUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 2</label>
+            <input class="field-input" type="number" [(ngModel)]="subVal2" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 2</label>
+            <select class="field-select" [(ngModel)]="subUnit2" [disabled]="!subQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of subUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Result Unit</label>
+          <select class="field-select" [(ngModel)]="subResultUnit" [disabled]="!subQtyType">
+            <option value="">— select type first —</option>
+            <option *ngFor="let u of subUnits" [value]="u">{{ u }}</option>
+          </select>
+        </div>
+
+        <div class="alert" *ngIf="subAlert"
+             [class.alert-error]="subAlert.type === 'error'"
+             [class.alert-success]="subAlert.type === 'success'">
+          {{ subAlert.message }}
+        </div>
+
+        <button class="submit-btn" (click)="onSubtract()" [disabled]="subLoading">
+          <span *ngIf="!subLoading">Calculate</span>
+          <span *ngIf="subLoading" class="spinner"></span>
+        </button>
+
+        <div class="result-box" *ngIf="subResult">
+          <div class="result-label">Result</div>
+          <div class="result-value">
+            {{ subResult.value }}<span class="result-unit">{{ subResult.unitSymbol }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ DIVIDE ════════════════════════════════════════ -->
+  <section *ngIf="activeTab === 'divide'">
+    <div class="panel-inner">
+      <div class="op-card">
+        <div class="op-card-header">
+          <h2 class="op-title">Divide</h2>
+          <p class="op-subtitle">Get the ratio between two quantities</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Quantity Type</label>
+          <select class="field-select" [(ngModel)]="divQtyType" (change)="onDivQtyTypeChange()">
+            <option value="">Select type</option>
+            <option *ngFor="let qt of quantityTypes" [value]="qt">{{ qt }}</option>
+          </select>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 1</label>
+            <input class="field-input" type="number" [(ngModel)]="divVal1" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 1</label>
+            <select class="field-select" [(ngModel)]="divUnit1" [disabled]="!divQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of divUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 2</label>
+            <input class="field-input" type="number" [(ngModel)]="divVal2" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 2</label>
+            <select class="field-select" [(ngModel)]="divUnit2" [disabled]="!divQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of divUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="alert" *ngIf="divAlert"
+             [class.alert-error]="divAlert.type === 'error'"
+             [class.alert-success]="divAlert.type === 'success'">
+          {{ divAlert.message }}
+        </div>
+
+        <button class="submit-btn" (click)="onDivide()" [disabled]="divLoading">
+          <span *ngIf="!divLoading">Calculate</span>
+          <span *ngIf="divLoading" class="spinner"></span>
+        </button>
+
+        <div class="result-box" *ngIf="divResult !== null">
+          <div class="result-label">Ratio</div>
+          <div class="result-value">{{ divResult }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COMPARE ══════════════════════════════════════ -->
+  <section *ngIf="activeTab === 'compare'">
+    <div class="panel-inner">
+      <div class="op-card">
+        <div class="op-card-header">
+          <h2 class="op-title">Compare</h2>
+          <p class="op-subtitle">Check if two quantities are equal</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Quantity Type</label>
+          <select class="field-select" [(ngModel)]="cmpQtyType" (change)="onCmpQtyTypeChange()">
+            <option value="">Select type</option>
+            <option *ngFor="let qt of quantityTypes" [value]="qt">{{ qt }}</option>
+          </select>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 1</label>
+            <input class="field-input" type="number" [(ngModel)]="cmpVal1" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 1</label>
+            <select class="field-select" [(ngModel)]="cmpUnit1" [disabled]="!cmpQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of cmpUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">Value 2</label>
+            <input class="field-input" type="number" [(ngModel)]="cmpVal2" placeholder="0" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Unit 2</label>
+            <select class="field-select" [(ngModel)]="cmpUnit2" [disabled]="!cmpQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of cmpUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="alert" *ngIf="cmpAlert"
+             [class.alert-error]="cmpAlert.type === 'error'"
+             [class.alert-success]="cmpAlert.type === 'success'">
+          {{ cmpAlert.message }}
+        </div>
+
+        <button class="submit-btn" (click)="onCompare()" [disabled]="cmpLoading">
+          <span *ngIf="!cmpLoading">Compare</span>
+          <span *ngIf="cmpLoading" class="spinner"></span>
+        </button>
+
+        <div class="result-box" *ngIf="cmpResult !== null">
+          <div class="result-label">Result</div>
+          <div [class.result-equal]="cmpResult" [class.result-unequal]="!cmpResult">
+            {{ cmpResult ? '✓ The two quantities are equal' : '✗ The two quantities are not equal' }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ CONVERT ══════════════════════════════════════ -->
+  <section *ngIf="activeTab === 'convert'">
+    <div class="panel-inner">
+      <div class="op-card">
+        <div class="op-card-header">
+          <h2 class="op-title">Convert</h2>
+          <p class="op-subtitle">Convert a quantity from one unit to another</p>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Quantity Type</label>
+          <select class="field-select" [(ngModel)]="cvtQtyType" (change)="onCvtQtyTypeChange()">
+            <option value="">Select type</option>
+            <option *ngFor="let qt of quantityTypes" [value]="qt">{{ qt }}</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Value</label>
+          <input class="field-input" type="number" [(ngModel)]="cvtVal" placeholder="0" />
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label">From</label>
+            <select class="field-select" [(ngModel)]="cvtSource" [disabled]="!cvtQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of cvtUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">To</label>
+            <select class="field-select" [(ngModel)]="cvtTarget" [disabled]="!cvtQtyType">
+              <option value="">— select type first —</option>
+              <option *ngFor="let u of cvtUnits" [value]="u">{{ u }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="alert" *ngIf="cvtAlert"
+             [class.alert-error]="cvtAlert.type === 'error'"
+             [class.alert-success]="cvtAlert.type === 'success'">
+          {{ cvtAlert.message }}
+        </div>
+
+        <button class="submit-btn" (click)="onConvert()" [disabled]="cvtLoading">
+          <span *ngIf="!cvtLoading">Convert</span>
+          <span *ngIf="cvtLoading" class="spinner"></span>
+        </button>
+
+        <div class="result-box" *ngIf="cvtResult">
+          <div class="result-label">Result</div>
+          <div class="result-value">
+            {{ cvtResult.value }}<span class="result-unit">{{ cvtResult.unitSymbol }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ HISTORY ══════════════════════════════════════ -->
+  <section *ngIf="activeTab === 'history'">
+    <div class="panel-inner panel-inner--wide">
+      <div class="history-header">
+        <div>
+          <h2 class="op-title">History</h2>
+          <p class="op-subtitle">Your past calculations</p>
+        </div>
+        <button class="refresh-btn" (click)="loadHistory()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"/>
+            <path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>
+          </svg>
+          Refresh
+        </button>
+      </div>
+
+      <div class="alert alert-error" *ngIf="historyAlert">{{ historyAlert.message }}</div>
+
+      <div class="history-loading" *ngIf="historyLoading">Loading…</div>
+
+      <div class="history-empty" *ngIf="!historyLoading && historyRows.length === 0 && historyLoaded">
+        No history yet. Start calculating!
+      </div>
+
+      <div class="history-table-wrap" *ngIf="!historyLoading && historyRows.length > 0">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Operation</th>
+              <th>Category</th>
+              <th>Input 1</th>
+              <th>Input 2</th>
+              <th>Result</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of historyRows; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td><span class="badge">{{ row.operation }}</span></td>
+              <td>{{ row.category }}</td>
+              <td>{{ row.value1 }} {{ row.unit1 }}</td>
+              <td>{{ row.value2 != null ? (row.value2 + ' ' + (row.unit2 ?? '')) : '—' }}</td>
+              <td><strong>{{ row.resultValue }}</strong> {{ row.resultUnit }}</td>
+              <td>{{ formatDate(row.createdAt) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>

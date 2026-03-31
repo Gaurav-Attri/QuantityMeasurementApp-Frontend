@@ -1,0 +1,116 @@
+<main class="page">
+  <div class="card">
+
+    <!-- Toggle bar -->
+    <div class="toggle-bar">
+      <button class="toggle-btn" [class.active]="activeTab === 'login'"  (click)="switchTab('login')">Log In</button>
+      <button class="toggle-btn" [class.active]="activeTab === 'signup'" (click)="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <!-- ── Login form ── -->
+    <form *ngIf="activeTab === 'login'" (ngSubmit)="onLogin()" novalidate>
+      <div class="form-header">
+        <h1 class="form-title">Welcome back</h1>
+        <p class="form-subtitle">Enter your credentials to continue</p>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input class="field-input" type="email" [(ngModel)]="loginEmail" name="loginEmail"
+               placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <div class="input-wrapper">
+          <input class="field-input" [type]="showLoginPassword ? 'text' : 'password'"
+                 [(ngModel)]="loginPassword" name="loginPassword"
+                 placeholder="••••••••" autocomplete="current-password" />
+          <button type="button" class="toggle-password" (click)="toggleLoginPassword()" aria-label="Toggle password">
+            <svg *ngIf="!showLoginPassword" class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showLoginPassword" class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="alert" [class.alert-error]="loginAlert?.type === 'error'" [class.alert-success]="loginAlert?.type === 'success'"
+           *ngIf="loginAlert">{{ loginAlert.message }}</div>
+
+      <button class="submit-btn" type="submit" [disabled]="loading">
+        <span *ngIf="!loading">Log In</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+
+      <p class="switch-text">
+        Don't have an account?
+        <a href="#" class="switch-link" (click)="switchTab('signup'); $event.preventDefault()">Sign up</a>
+      </p>
+    </form>
+
+    <!-- ── Signup form ── -->
+    <form *ngIf="activeTab === 'signup'" (ngSubmit)="onSignup()" novalidate>
+      <div class="form-header">
+        <h1 class="form-title">Create account</h1>
+        <p class="form-subtitle">Fill in your details to get started</p>
+      </div>
+
+      <div class="name-row">
+        <div class="field-group">
+          <label class="field-label">First Name</label>
+          <input class="field-input" type="text" [(ngModel)]="signupFirstName" name="signupFirstName"
+                 placeholder="John" autocomplete="given-name" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Last Name</label>
+          <input class="field-input" type="text" [(ngModel)]="signupLastName" name="signupLastName"
+                 placeholder="Doe" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Email</label>
+        <input class="field-input" type="email" [(ngModel)]="signupEmail" name="signupEmail"
+               placeholder="you@example.com" autocomplete="email" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Password</label>
+        <div class="input-wrapper">
+          <input class="field-input" [type]="showSignupPassword ? 'text' : 'password'"
+                 [(ngModel)]="signupPassword" name="signupPassword"
+                 placeholder="••••••••" autocomplete="new-password" />
+          <button type="button" class="toggle-password" (click)="toggleSignupPassword()" aria-label="Toggle password">
+            <svg *ngIf="!showSignupPassword" class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg *ngIf="showSignupPassword" class="eye-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/>
+              <path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="alert" [class.alert-error]="signupAlert?.type === 'error'" [class.alert-success]="signupAlert?.type === 'success'"
+           *ngIf="signupAlert">{{ signupAlert.message }}</div>
+
+      <button class="submit-btn" type="submit" [disabled]="loading">
+        <span *ngIf="!loading">Create Account</span>
+        <span *ngIf="loading" class="spinner"></span>
+      </button>
+
+      <p class="switch-text">
+        Already have an account?
+        <a href="#" class="switch-link" (click)="switchTab('login'); $event.preventDefault()">Log in</a>
+      </p>
+    </form>
+
+  </div>
+</main>
