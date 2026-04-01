@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface QuantityResult   { value: number; unitSymbol: string; }
 export interface DivisionResult   { ratio: number; }
@@ -32,7 +33,7 @@ const UNITS_MAP: Record<string, string[]> = {
 
 @Injectable({ providedIn: 'root' })
 export class MeasurementService {
-  private readonly BASE = 'http://localhost:5174/api/quantitymeasurement';
+  private readonly BASE = `${environment.apiUrl}/api/quantitymeasurement`;
 
   constructor(private http: HttpClient) {}
 
